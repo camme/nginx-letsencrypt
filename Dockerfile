@@ -28,6 +28,8 @@ RUN mkdir /var/www
 COPY ./bootscripts/entrypoint.sh /bootscripts/entrypoint.sh
 COPY ./templates /nginx-templates
 
+RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048  
+
 WORKDIR /bootscripts
 
 CMD ./entrypoint.sh
