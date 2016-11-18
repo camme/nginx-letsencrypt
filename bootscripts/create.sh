@@ -44,13 +44,12 @@ service nginx restart
 
 cp $ORIGINAL_FILE $WORK_FILE
 
+sed -i.bak '/listen/d' $WORK_FILE
+
 sed -i.bak '/server {/ {
 r /nginx-templates/https.part
 }' $WORK_FILE
 
-
-
-sed -i.bak '/listen/d' $WORK_FILE
 sed -i.bak "s/\$HOST_NAME/$HOSTS/g" $WORK_FILE
 
 sed -i.bak '/server {/ {
