@@ -20,7 +20,8 @@ RUN ./certbot-auto --os-packages-only --non-interactive
 
 RUN mkdir /var/www
 
-RUN sed -i "s/include \/etc\/nginx\/conf.d\/*.conf;/include \/etc\/nginx\/sites-enabled\/\*;/g" /etc/nginx/nginx.conf
+RUN sed -i "s/include \/etc\/nginx\/conf.d\/\*.conf;/include \/etc\/nginx\/conf.d\/\*.conf;\ninclude \/etc\/nginx\/sites-enabled\/\*;/g" /etc/nginx/nginx.conf
+RUN cat /etc/nginx/nginx.conf
 #RUN sed -i "s/opcache.revalidate_freq=60/opcache.revalidate_freq=0/g" /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 
