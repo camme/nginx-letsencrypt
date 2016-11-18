@@ -1,13 +1,13 @@
 #!/bin/bash
 
-cp "/nginx-templates/${NGINX_SITE_TEMPLATE}.conf" /etc/nginx/conf.d/site.conf
-sed -i "s/\$SITE_HOST/$SITE_HOST/g" /etc/nginx/conf.d/site.conf
+set -e
 
-service nginx start  
 
-/opt/certbot/certbot-auto certonly --webroot -w /var/www -d $SITE_HOST --noninteractive --agree-tos --email $CERT_EMAIL
+service nginx start
+#openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048  
 
-cp "/nginx-templates/${NGINX_SITE_TEMPLATE}.https.conf" /etc/nginx/conf.d/site.conf
-sed -i "s/\$SITE_HOST/$SITE_HOST/g" /etc/nginx/conf.d/site.conf
+SITE_CONF_FILE=$(ls -d -1 /nginx-letsencrypt/**)
+./create.sh $SITE_CONF_FILE
 
-echo 'Done';
+nginx
+

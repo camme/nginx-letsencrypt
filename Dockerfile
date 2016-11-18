@@ -25,10 +25,11 @@ RUN mkdir /var/www
 #
 #-a webroot --webroot-path=/var/www --noninteractive --agree-tos --email camilo.tapia@gmail.com
 
-COPY ./bootscripts/entrypoint.sh /bootscripts/entrypoint.sh
+COPY ./bootscripts /bootscripts
 COPY ./templates /nginx-templates
 
-RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048  
+VOLUME /nginx-letsencrypt
+
 
 WORKDIR /bootscripts
 
