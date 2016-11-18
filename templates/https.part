@@ -11,7 +11,8 @@
     ssl_stapling_verify on;
     resolver 8.8.8.8 8.8.4.4 valid=300s;
     resolver_timeout 5s;
-    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
+    add_header Strict-Transport-Security "max-age=-1;";
+    #add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
 
     ssl_certificate /etc/letsencrypt/live/$HOST_NAME/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/$HOST_NAME/privkey.pem;

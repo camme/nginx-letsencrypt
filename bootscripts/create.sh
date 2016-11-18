@@ -3,6 +3,7 @@
 set -e
 
 mkdir -p /nginx-letsencrypt-temp
+mkdir -p /etc/nginx/sites-enabled
 
 ORIGINAL_FILE=$1
 #../examples/test-size.conf
@@ -32,6 +33,10 @@ sed -i.bak '/server {/ {
 r /nginx-templates/well-known.part
 }' $WORK_FILE
 
+cp $WORK_FILE /etc/nginx/sites-enabled
+
+cat $WORK_FILE
+
 service nginx restart
 
 # ------------------- start certbot and get cert -------------------
@@ -48,19 +53,19 @@ r /nginx-templates/https.part
 sed -i.bak '/listen/d' $WORK_FILE
 sed -i.bak "s/\$HOST_NAME/$HOSTS/g" $WORK_FILE
 
-
 sed -i.bak '/server {/ {
 r /nginx-templates/redirect.part
 N
 }' $WORK_FILE
 
-
 sed -i.bak "s/\$HOST_NAME/$HOSTS/g" $WORK_FILE
 
+cat $WORK_FILE
+
 rm $WORK_FILE.bak
+rm $WORK_FILE
 
 service nginx restart
 
 echo 'Done';
 
-cat $WORK_FILE
