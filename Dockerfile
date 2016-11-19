@@ -3,22 +3,21 @@ FROM nginx:1.11.5
 ARG VERSION=0-DEV
 ENV VERSION=${VERSION}
 
+RUN mkdir -p /etc/ssl/certs
+RUN mkdir /opt/certbot
+RUN mkdir /var/www
+RUN mkdir /nginx-letsencrypt-temp
+
+VOLUME ['/nginx-letsencrypt', '/etc/letsencrypt/live/', '/etc/ssl/certs']
+
+
 RUN apt-get update
 RUN apt-get install wget -y
 
-RUN mkdir /opt/certbot
 WORKDIR /opt/certbot
 RUN wget https://dl.eff.org/certbot-auto
 RUN chmod a+x certbot-auto
 RUN ./certbot-auto --os-packages-only --non-interactive
-#--noninteractive
-
-#RUN apt-get install certbot 
-#RUN apt-get -y install git
-#RUN git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt  
-#WORKDIR /opt/letsencrypt  
-
-RUN mkdir /var/www
 
 RUN sed -i "s/include \/etc\/nginx\/conf.d\/\*.conf;/include \/etc\/nginx\/conf.d\/\*.conf;\ninclude \/etc\/nginx\/sites-enabled\/\*;/g" /etc/nginx/nginx.conf
 RUN cat /etc/nginx/nginx.conf
@@ -33,9 +32,11 @@ RUN cat /etc/nginx/nginx.conf
 COPY ./bootscripts /bootscripts
 COPY ./templates /nginx-templates
 
-VOLUME /nginx-letsencrypt
-
+RUN touch /var/log/cron.log
+ADD ./bootscripts/letsencrypt-cron /etc/cron.d/letsencrypt-cron
 
 WORKDIR /bootscripts
+
+EXPOSE 80 443
 
 CMD ./entrypoint.sh
