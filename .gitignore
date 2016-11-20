@@ -2,3 +2,4 @@
 certs
 keys
 .env
+version.txt
