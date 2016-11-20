@@ -43,10 +43,10 @@ service nginx restart
 
 # ------------------- start certbot and get cert -------------------
 if [ -z "$DRY_RUN" ]; then
+    /opt/certbot/certbot-auto certonly --webroot -w /var/www -d $HOSTS --noninteractive --agree-tos --email $CERT_EMAIL
+else 
     echo "Dry run!"
     /opt/certbot/certbot-auto certonly --dry-run --webroot -w /var/www -d $HOSTS --noninteractive --agree-tos --email $CERT_EMAIL
-else 
-    /opt/certbot/certbot-auto certonly --webroot -w /var/www -d $HOSTS --noninteractive --agree-tos --email $CERT_EMAIL
 fi  
 
 
